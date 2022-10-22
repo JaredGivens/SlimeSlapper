@@ -7,12 +7,11 @@ public class EnemyAI : MonoBehaviour
 {
     private NavMeshAgent agent;
     private Transform player;
-    public LayerMask whatIsGround, whatIsPlayer;
     public Vector3 wanderTarget;
     public float walkPointRange;
 
-    public float attackCD, sightRange, attackRange;
-    public bool playerFound, withinSight, withinAttack;
+    public float attackCD, sightRange, attackRange, dist;
+    public bool playerFound;
 
     private void Awake()
     {
@@ -29,17 +28,16 @@ public class EnemyAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        withinSight = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-        withinAttack = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+        dist = Vector3.Distance(transform.position, player.position);
 
-        if(withinSight && !withinAttack)
-        {
-            Chase();
-
-        } 
-        else
+        if(dist < attackRange)
         {
             Attack();
+
+        } 
+        else if(dist < sightRange)
+        {
+            Chase();
         }
         
     }
