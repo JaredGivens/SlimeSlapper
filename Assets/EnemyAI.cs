@@ -2,20 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.Controls;
 
 public class EnemyAI : MonoBehaviour
 {
     private NavMeshAgent agent;
-    private Transform player;
-    public Vector3 wanderTarget;
-    public float walkPointRange;
+    private GameObject player;
+    private Vector3 wanderTarget;
 
-    public float attackCD, sightRange, attackRange, dist;
-    public bool playerFound;
+    private float chargeCD, dist;
+    public float sightRange, attackRange;
+    private bool playerFound;
 
     private void Awake()
     {
-        player = GameObject.Find("Player").transform;
+        player = GameObject.Find("Player");
         agent = GetComponent<NavMeshAgent>();
 
     }
@@ -24,11 +25,23 @@ public class EnemyAI : MonoBehaviour
     {
         
     }
+    private void FixedUpdate()
+    {
+        --chargeCD;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, sightRange);
+    }
 
     // Update is called once per frame
     void Update()
     {
-        dist = Vector3.Distance(transform.position, player.position);
+        dist = Vector3.Distance(transform.position, player.transform.position);
 
         if(dist < attackRange)
         {
@@ -43,11 +56,24 @@ public class EnemyAI : MonoBehaviour
     }
     private void Attack()
     {
-        Debug.Log("attack");
+
+        Charge();
+    }
+
+
+    private void Charge()
+    {
+        if (chargeCD != 0)
+        {
+            
+            chargeCD = 100;
+
+        }
     }
     private void Chase()
     {
-        agent.SetDestination(player.position);
+        Vector3 offset = Vector3.Normalize(transform.position - player.transform.position) * 3;
+        agent.SetDestination(offset + player.transform.position);
     }
 
 }
