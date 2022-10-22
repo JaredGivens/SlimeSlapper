@@ -6,6 +6,25 @@ public class PauseMenu : MonoBehaviour
     public MenuInputReader inputReader;
     public GameObject pauseMenu, settingsMenu;
 
+    private CameraController m_playerCamera;
+    private GameObject m_player;
+    private float m_pitch, m_yaw;
+    private Vector3 m_eulerAngles;
+
+    private void Awake(){
+        m_player = GameObject.Find("Player");
+        m_playerCamera = m_player.transform.GetChild(0).GetChild(0).GetComponent<CameraController>();
+    }
+
+    private void Update(){
+        if(!GameState.isPaused)
+            return;
+        
+        m_playerCamera.pitch = m_pitch;
+        m_playerCamera.yaw = m_yaw;
+        m_player.transform.eulerAngles = m_eulerAngles;
+    }
+
 	private void OnEnable()
 	{
         Cursor.visible = false;
@@ -44,10 +63,15 @@ public class PauseMenu : MonoBehaviour
         if(GameState.isPaused)
         {
             Resume();
+            EnableControls(false);
         }
         else
         {
             Pause();
+            EnableControls(true);
+            m_pitch = m_playerCamera.pitch;
+            m_yaw = m_playerCamera.yaw;
+            m_eulerAngles = m_player.transform.eulerAngles;
         }
     }
 
@@ -55,6 +79,11 @@ public class PauseMenu : MonoBehaviour
     {
         //pauseMenu.SetActive(false);
         //settingsMenu.SetActive(true);
+    }
+
+    private void EnableControls(bool enable)
+    {
+        m_playerCamera.enabled = !enable;
     }
     
     public void Quit()
