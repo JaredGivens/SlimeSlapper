@@ -7,16 +7,26 @@ public class DevGun : MonoBehaviour
     private Camera cam;
     public LayerMask ignoreMask;
     public GameObject prefab;
-    
+    private Animator animator;
+
+    private AudioSource mAudioSource;
+    private float og_pitch;
     private void Start()
     {
         cam = transform.parent.parent.GetComponent<Camera>();
+        animator = GetComponent<Animator>();
+        mAudioSource = GetComponent<AudioSource>();
+        og_pitch = mAudioSource.pitch;
     }
     
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            Debug.Log("MB0 clicked.");
+            animator.Play("base.arm_swing");
+            mAudioSource.pitch = Random.Range(-0.35f, 0.35f) + og_pitch; 
+            mAudioSource.Play();
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, maxDistance, ignoreMask))
             {
                 //FireImpulse(hit);
@@ -27,7 +37,7 @@ public class DevGun : MonoBehaviour
     
     public void FireBullets(RaycastHit hit)
     {
-        if(hit.transform.gameObject.CompareTag("Unit"))
+        if(hit.transform.gameObject.name == "")
         {
             EntityHealth hp = hit.transform.GetComponent<EntityHealth>();
 
