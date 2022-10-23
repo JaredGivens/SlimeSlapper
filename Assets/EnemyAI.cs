@@ -33,11 +33,6 @@ public class EnemyAI : MonoBehaviour
         health = player.GetComponent<PlayerHealth>();
 
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     private void OnDrawGizmosSelected()
     {
@@ -70,6 +65,7 @@ public class EnemyAI : MonoBehaviour
         Quaternion rotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5);
     }
+    
     private void TryChargeTumble()
     {
         FacePlayer();

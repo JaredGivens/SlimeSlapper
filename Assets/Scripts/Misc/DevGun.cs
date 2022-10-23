@@ -23,7 +23,6 @@ public class DevGun : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Debug.Log("MB0 clicked.");
             animator.Play("base.arm_swing");
             mAudioSource.pitch = Random.Range(-0.35f, 0.35f) + og_pitch; 
             mAudioSource.Play();
@@ -37,12 +36,14 @@ public class DevGun : MonoBehaviour
     
     public void FireBullets(RaycastHit hit)
     {
-        if(hit.transform.gameObject.name == "")
+        if(hit.transform.gameObject.name == "Slime")
         {
-            EntityHealth hp = hit.transform.GetComponent<EntityHealth>();
-
-            if(hp)
+            EntityHealth hp = hit.transform.GetComponent<SlimeHealth>();
+            if (hp)
+            {
                 hp.SendDamage(25);
+                Debug.Log("Doing 25 damage to slime. New slime health: " + hp);
+            }
         }
     }
 
