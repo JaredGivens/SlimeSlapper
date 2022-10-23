@@ -11,6 +11,15 @@ public class PlayerHealth : EntityHealth
         currentArmor += armor;
     }
 
+    public override void OnDeath()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
+    }
+
     public override void ProcessDamage(float damage)
     {
         if(currentArmor < damage)

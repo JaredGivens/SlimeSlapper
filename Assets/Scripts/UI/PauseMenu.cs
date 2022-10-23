@@ -43,6 +43,7 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         
+        EnableControls(true);
         pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         GameState.isPaused = false;
@@ -52,6 +53,11 @@ public class PauseMenu : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        
+        EnableControls(false);
+        m_pitch = m_playerCamera.pitch;
+        m_yaw = m_playerCamera.yaw;
+        m_eulerAngles = m_player.transform.eulerAngles;
         
         pauseMenu.SetActive(true);
         Time.timeScale = 0f;
@@ -63,15 +69,10 @@ public class PauseMenu : MonoBehaviour
         if(GameState.isPaused)
         {
             Resume();
-            EnableControls(false);
         }
         else
         {
             Pause();
-            EnableControls(true);
-            m_pitch = m_playerCamera.pitch;
-            m_yaw = m_playerCamera.yaw;
-            m_eulerAngles = m_player.transform.eulerAngles;
         }
     }
 
@@ -83,7 +84,7 @@ public class PauseMenu : MonoBehaviour
 
     private void EnableControls(bool enable)
     {
-        m_playerCamera.enabled = !enable;
+        m_playerCamera.enabled = enable;
     }
     
     public void Quit()
