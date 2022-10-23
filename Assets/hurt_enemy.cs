@@ -11,11 +11,9 @@ public class hurt_enemy : MonoBehaviour
     }
     public void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("collide");
         if(collision.gameObject.tag == "Enemy")
         {
             EntityHealth hp = collision.gameObject.GetComponent<EntityHealth>();
-                Debug.Log(hp.currentHealth);
             hp.ProcessDamage(10);
 
 
