@@ -123,6 +123,15 @@ public class PlayerController : BaseController
 
     public override void Jump()
     {
+        if(maximumJumps == 1 && !characterController.isGrounded)
+            return;
+        
+        m_JumpCounter += 1;
+        if (m_JumpCounter < maximumJumps + 1 && !isSliding)
+        {
+            currentGravity = jumpHeight;
+            isJumping = true;
+        }
     }
 
     public override void Crouch(bool toggleCrouch)

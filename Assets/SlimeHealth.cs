@@ -14,7 +14,6 @@ public class SlimeHealth : EntityHealth
     }
     override public void OnDeath()
     {
-
         GameObject slime;
         slime = Instantiate(spawn, transform.position +new Vector3(UnityEngine.Random.Range(min.x, max.x), 2, UnityEngine.Random.Range(min.z, max.z)), Quaternion.identity);
         slime.GetComponent<EntityHealth>().currentHealth = 100;
