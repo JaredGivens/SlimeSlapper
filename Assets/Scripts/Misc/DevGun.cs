@@ -36,12 +36,14 @@ public class DevGun : MonoBehaviour
     
     public void FireBullets(RaycastHit hit)
     {
-        if(hit.transform.gameObject.name == "")
+        if(hit.transform.gameObject.name == "Slime")
         {
-            EntityHealth hp = hit.transform.GetComponent<EntityHealth>();
-
-            if(hp)
+            EntityHealth hp = hit.transform.GetComponent<SlimeHealth>();
+            if (hp)
+            {
                 hp.SendDamage(25);
+                Debug.Log("Doing 25 damage to slime. New slime health: " + hp);
+            }
         }
     }
 
