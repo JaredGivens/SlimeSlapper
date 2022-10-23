@@ -49,12 +49,13 @@ public class EnemyAI : MonoBehaviour
 
         if(dist < attackRange)
         {
-            health.ProcessDamage(0.01f);
+            health.ProcessDamage(0.02f);
         }
         if(dist < sightRange)
         {
             
             Chase();
+            animator.Play("Cube_tumble");
         }
         
     }

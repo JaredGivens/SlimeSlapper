@@ -7,10 +7,12 @@ public class SlimeHealth : EntityHealth
     public GameObject spawn;
     static Vector3 min = new Vector3(-1, -1, -1);
     static Vector3 max = new Vector3(1, 1, 1);
+    private AudioSource squash;
     // Start is called before the first frame update
     void Start()
     {
-        
+        squash = GetComponent<AudioSource>();
+        squash.Stop();
     }
     override public void OnDeath()
     {
@@ -19,7 +21,16 @@ public class SlimeHealth : EntityHealth
         slime.GetComponent<EntityHealth>().currentHealth = 100;
         slime = Instantiate(spawn, transform.position +new Vector3(UnityEngine.Random.Range(min.x, max.x), 2, UnityEngine.Random.Range(min.z, max.z)), Quaternion.identity);
         slime.GetComponent<EntityHealth>().currentHealth = 100;
+        StartCoroutine(PlayDeath());
+    }
+
+    private IEnumerator PlayDeath()
+    {
+    
+        squash.Play();
+        yield return new WaitForSeconds(squash.clip.length);
         Destroy(gameObject);
+
     }
 
     // Update is called once per frame
