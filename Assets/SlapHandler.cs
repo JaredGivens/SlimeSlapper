@@ -24,12 +24,14 @@ public class SlapHandler : MonoBehaviour
         {
             var state_info = animated_arm_animator.GetCurrentAnimatorStateInfo(0);
             var is_arm_swinging = state_info.IsName("arm_swing");
-            if (!is_arm_swinging) return;
+           if (!is_arm_swinging) return;
             else
             {
                 var eh = collision.gameObject.GetComponent<EntityHealth>();
+                if(eh != null) { 
                 eh.SendDamage(25);
                 Debug.Log("slime health: " + eh.currentHealth);
+                }
             }
         }
         else
