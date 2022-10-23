@@ -13,7 +13,11 @@ public class PlayerHealth : EntityHealth
 
     public override void OnDeath()
     {
-        Application.Quit();
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
 
     public override void ProcessDamage(float damage)
