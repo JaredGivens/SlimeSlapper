@@ -14,7 +14,6 @@ enum SlimeState
 public class EnemyAI : MonoBehaviour
 {
     private Animator animator;
-    private NavMeshAgent agent;
     private GameObject player;
     private Vector3 wanderTarget;
 
@@ -22,15 +21,16 @@ public class EnemyAI : MonoBehaviour
     private float tumbleCD, tumbleCharge, tumbleChargeDuration;
     private float dist;
     private bool isAttacking;
-    public float sightRange, attackRange, stopDist;
+    public float speed, sightRange, attackRange;
+    private PlayerHealth health;
 
     private void Awake()
     {
         tumbleCD = 0;
         tumbleCharge = 0;
         player = GameObject.Find("Player");
-        agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        health = player.GetComponent<PlayerHealth>();
 
     }
     // Start is called before the first frame update
@@ -52,25 +52,13 @@ public class EnemyAI : MonoBehaviour
     {
         dist = Vector3.Distance(transform.position, player.transform.position);
 
-        if(tumbleCD > 0) { 
-            tumbleCD -= Time.deltaTime;
+        if(dist < attackRange)
+        {
+            health.ProcessDamage(0.01f);
         }
-        if(state == SlimeState.Tumble)
+        if(dist < sightRange)
         {
-            Tumble();
-        }else
-
-        if(state == SlimeState.ChargeTumble)
-        {
-            TryTumble();
-
-        }else if(dist < attackRange)
-        {
-            TryChargeTumble();
-
-        } 
-        else if(dist < sightRange)
-        {
+            
             Chase();
         }
         
@@ -101,7 +89,6 @@ public class EnemyAI : MonoBehaviour
     }
     private void TryTumble()
     {
-            FacePlayer();
         if(tumbleCharge > tumbleChargeDuration)
         {
             state = SlimeState.Tumble;
@@ -119,14 +106,12 @@ public class EnemyAI : MonoBehaviour
         transform.localScale.Set(1 + scaleMod, 1 - scaleMod, 1 + scaleMod);
     }
 
-    private void Attack()
-    {
-        
-    }
     private void Chase()
     {
-        Vector3 offset = (transform.position - player.transform.position).normalized * stopDist;
-        agent.SetDestination(offset + player.transform.position);
+        FacePlayer();
+        Vector3 move = (player.transform.position - transform.position).normalized * Time.deltaTime  * speed;
+        move.y = 0;
+        transform.position += move;
     }
 
 }

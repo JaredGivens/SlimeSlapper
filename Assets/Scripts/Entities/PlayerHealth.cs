@@ -11,6 +11,11 @@ public class PlayerHealth : EntityHealth
         currentArmor += armor;
     }
 
+    public override void OnDeath()
+    {
+        Application.Quit();
+    }
+
     public override void ProcessDamage(float damage)
     {
         if(currentArmor < damage)
