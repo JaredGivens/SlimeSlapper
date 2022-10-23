@@ -13,10 +13,10 @@ enum SlimeState
 }
 public class EnemyAI : MonoBehaviour
 {
-    private Animator animator;
     private GameObject player;
     private Vector3 wanderTarget;
 
+    public float slime_dmg = 0.1f;
     private SlimeState state;
     private float tumbleCD, tumbleCharge, tumbleChargeDuration;
     private float dist;
@@ -29,7 +29,6 @@ public class EnemyAI : MonoBehaviour
         tumbleCD = 0;
         tumbleCharge = 0;
         player = GameObject.Find("Player");
-        animator = GetComponent<Animator>();
         health = player.GetComponent<PlayerHealth>();
 
     }
@@ -49,13 +48,12 @@ public class EnemyAI : MonoBehaviour
 
         if(dist < attackRange)
         {
-            health.ProcessDamage(0.02f);
+            health.ProcessDamage(slime_dmg);
         }
         if(dist < sightRange)
         {
             
             Chase();
-            animator.Play("Cube_tumble");
         }
         
     }

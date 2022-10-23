@@ -14,6 +14,7 @@ public class SlimeHealth : EntityHealth
     // Start is called before the first frame update
     void Start()
     {
+        died = false;
         ++amt;
         if(amt == max_slimes)
         {
@@ -29,10 +30,17 @@ public class SlimeHealth : EntityHealth
     }
     override public void OnDeath()
     {
+        if(died)
+        {
+            return;
+
+        }
+        died = true;
         GameObject slime;
         slime = Instantiate(spawn, transform.position +new Vector3(UnityEngine.Random.Range(min.x, max.x), 2, UnityEngine.Random.Range(min.z, max.z)), Quaternion.identity);
         slime.GetComponent<EntityHealth>().currentHealth = 100;
-        currentHealth = 100;
+        slime = Instantiate(spawn, transform.position +new Vector3(UnityEngine.Random.Range(min.x, max.x), 2, UnityEngine.Random.Range(min.z, max.z)), Quaternion.identity);
+        slime.GetComponent<EntityHealth>().currentHealth = 100;
         StartCoroutine(PlayDeath());
     }
 
@@ -41,7 +49,7 @@ public class SlimeHealth : EntityHealth
     
         squash.Play();
         yield return new WaitForSeconds(squash.clip.length);
-
+        Destroy(gameObject);
     }
 
     // Update is called once per frame
